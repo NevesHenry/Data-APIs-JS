@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Train: Data/APIs 1</title>
+</head>
+<body>
+    <div>
+        <img src="" id="sorcerer" width="480"/>
+    </div>
+    <h1>Hello World</h1>
+    <script>
+        console.log('About to fetch a Sorcerer');
+
+        catchSorcerer().then(response => {
+            console.log('Yay');
+        }).catch(error => {
+            console.log('error!');
+            console.error(error);
+        });
+        
+        async function catchSorcerer(){
+            const response = await fetch('Sorcerer_artwork.jpg');
+            const blob = await response.blob();
+            document.getElementById('sorcerer').src = URL.createObjectURL(blob);
+        }
+        
+    </script>
+</body>
+</html>
