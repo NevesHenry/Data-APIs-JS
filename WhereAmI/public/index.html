@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <style>
+        #issMap { height: 400px; }
+    </style>
+    <title>Where am I</title>
+</head>
+<body>
+    <div id='issMap'></div>
+    <script>
+        
+        const mymap = L.map('issMap').setView([0,0], 1);
+        const marker = L.marker([0,0]).addTo(mymap);
+        const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+        const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const tiles = L.tileLayer(tileUrl, {attribution});
+        tiles.addTo(mymap);
+
+        if('geolocation' in navigator){
+           console.log("Geolocation available");
+            navigator.geolocation.getCurrentPosition(async position => {
+               const lat = position.coords.latitude;
+               const lon = position.coords.longitude;
+               document.getElementById("latitude").textContent = lat.toFixed(2);
+               document.getElementById("longitude").textContent = lon.toFixed(2);
+               
+               const data = {lat,lon};
+               const options = {
+                   method: 'POST',
+                   headers: {
+                       "Content-Type": "application/json",
+                   },
+                   body: JSON.stringify(data)
+               };
+               const response = await fetch('/api', options);
+               const json = await response.json();
+               console.log(json);
+            
+            
+               let zoom = 1;
+               marker.setLatLng([lat, lon]);
+               mymap.setView([lat, lon],1);
+
+               function zoomIn(){
+                mymap.setView([lat, lon],zoom);
+                if(zoom > 15){
+                    return;
+                }
+                zoom++;
+               }
+
+               setInterval(zoomIn, 500);
+            });
+        }
+        else{
+            console.log("Geolocatin NOT avaliable");
+        }
+    </script>
+    <h1>Data Selfie App</h1>
+    <p>latitude: <span id="latitude"></span>&deg;<br/>
+    longitude: <span id="longitude"></span>&deg;</p>
+</body>
+</html>
