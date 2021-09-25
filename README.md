@@ -9,4 +9,4 @@ The second and third project will introduce "full stack" development adding serv
  - The mini projects where provided from Joey Lee where you can find more about in  https://github.com/joeyklee.
  - The whole series are in the Coding Train Youtube channel https://www.youtube.com/playlist?list=PLRqwX-V7Uu6YxDKpFzf_2D84p0cyk4T7X.
 
-I'll add new folders as I advance in they playlist series course and add more details here in the description.
+> I'll add new folders as I advance in the playlist series course and add more details here in the description.
